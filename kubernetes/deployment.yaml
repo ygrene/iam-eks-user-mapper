@@ -1,0 +1,39 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: kube-system
+  name: iam-eks-user-mapper
+  labels:
+    app: iam-eks-user-mapper
+spec:
+  selector:
+    matchLabels:
+      app: iam-eks-user-mapper
+      version: v1
+  template:
+    spec:
+      containers:
+        - name: deployment
+          image: ygrene/iam-eks-user-mapper
+          env:
+            - name: AWS_REGION
+              value: us-west-2
+            - name: AWS_ACCESS_KEY_ID
+              value:
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: awsKey
+                  name: iam-eks-user-mapper-aws-secret
+          command:
+            - ./app
+            - --aws-iam-group
+            - devs
+            - --k8s-cap
+            - system:masters
+      automountServiceAccountToken: true
+      serviceAccountName: iam-eks-user-mapper
+    metadata:
+      labels:
+        app: iam-eks-user-mapper
+        version: v1
