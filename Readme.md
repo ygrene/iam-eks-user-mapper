@@ -12,8 +12,20 @@ The general overview for what this tool does can be found here: https://ygrene.t
 $ echo -n "secretkey" | base64
 ```
 5) Update the `AWS_REGION` environment variable in `kubernetes/deployment.yaml` if you aren't running in `us-west-2` with your EKS cluster
-6) Edit the `kubernetes/deployment.yaml` `command:` with both the IAM group name you want to provide access to, and the Kubernetes group each user in the group should be mapped to.
-(there is an example in the manifest already)
+6) Edit the `kubernetes/deployment.yaml` `command:` with both the IAM groups (by name) you want to provide access to, and the Kubernetes groups each user in the group should be mapped to.
+
+The model for AWS IAM Group to Kubernetes Role Mapping is as follows:
+
+| Symbol | Description
+| --- | --- | 
+| `;` | Separates a mapping tuple 
+| `:` | Separates an AWS IAM Group from a list of Kubernetes Roles 
+| `,` | Separates a list of Kubernetes Roles for which an IAM Group maps to
+
+An Example argument: 
+
+`devs:cluster-admin;contractors:partial-admin,no-prod-access-role`
+
 7) Finally:
 ```bash
 $ kubectl apply -f kubernetes/
@@ -22,3 +34,14 @@ $ kubectl apply -f kubernetes/
 
 ## Have suggestions or want to contribute?
 Raise a PR or file an issue, I'd love to help!
+
+## Changelog:
+
+### 0.0.1
+* Initial Release
+
+### 0.0.2
+**BREAKING CHANGE**
+* Modified command-line arguments to accept a new flag `--role-mappings`
+* Removes the flags `--k8s-cap` and `--aws-iam-group`
+* Functionality change to now allow mapping of multiple AWS IAM Groups to multiple Kubernetes Groups

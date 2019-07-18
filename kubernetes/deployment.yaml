@@ -27,10 +27,8 @@ spec:
                   name: iam-eks-user-mapper-aws-secret
           command:
             - ./app
-            - --aws-iam-group
-            - devs
-            - --k8s-cap
-            - system:masters
+            - --role-mappings
+            - devs:system:masters
       automountServiceAccountToken: true
       serviceAccountName: iam-eks-user-mapper
     metadata:

@@ -5,3 +5,5 @@ type MapUserConfig struct {
 	Username string `yaml:"username"`
 	Groups []string `yaml:"groups"`
 }
+
+type InputMap map[string][]string
