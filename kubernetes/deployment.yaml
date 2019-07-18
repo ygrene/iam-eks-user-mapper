@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: deployment
-          image: ygrene/iam-eks-user-mapper
+          image: ygrene/iam-eks-user-mapper:0.0.2
           env:
             - name: AWS_REGION
               value: us-west-2
